@@ -4,21 +4,21 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super-secret-key-change-in-prod'
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet', allow_reissue_request=True)  # Фикс для туннелей
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet', allow_reissue_request=True)
 
 # In-memory данные
-users = []  # [{'id': int, 'username': str, 'password': str}]
-messages = []  # [{'from': str, 'to': str, 'text': str, 'timestamp': str}]
+users = []
+messages = []
 online_users = set()
-sid_to_user = {}  # {sid: username} — для 'from' в сообщениях
+sid_to_user = {}
 
-# HTML шаблон (встроенный)
+# HTML шаблон
 HTML_TEMPLATE = '''
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Моя СоцСеть Python</title>
+    <title>Моя СоцСеть</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
     <style>
         body { font-family: Arial; margin: 20px; }
@@ -214,4 +214,4 @@ def on_disconnect():
         print(f'{username} отключился')
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    socketio.run(app, debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
