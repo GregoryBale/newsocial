@@ -1,11 +1,11 @@
 from flask import Flask, render_template_string, request, jsonify
 from flask_socketio import SocketIO, emit, join_room
 from datetime import datetime
-import os  # Для $PORT
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super-secret-key-change-in-prod'
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent', allow_reissue_request=True)  # Фикс: gevent вместо eventlet
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent', allow_reissue_request=True)  # Фикс: gevent
 
 # In-memory данные
 users = []
@@ -13,7 +13,7 @@ messages = []
 online_users = set()
 sid_to_user = {}
 
-# HTML шаблон
+# HTML шаблон (тот же)
 HTML_TEMPLATE = '''
 <!DOCTYPE html>
 <html lang="ru">
@@ -216,4 +216,5 @@ def on_disconnect():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    socketio.run(app, debug=True, host='0.0.0.0', port=port)  # Для локалки; gunicorn для Render
+    # socketio.run(app, debug=True, host='0.0.0.0', port=port)  # Закомментируй для Render (gunicorn использует)
+    pass
